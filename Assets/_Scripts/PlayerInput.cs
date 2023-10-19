@@ -6,9 +6,12 @@ namespace Platformer2.Inputs
 
     public class PlayerInput : MonoBehaviour
     {
-        private Vector3 movment;
+        private Vector2 movment;
         private PlayerMovement playerMovement;
         public bool EPressed;
+        float vertical = 0f;
+        float horizontal = 0f;
+
 
         private void Awake()
         {
@@ -16,12 +19,16 @@ namespace Platformer2.Inputs
         }
         void Update()
         {
-            float horizontal = Input.GetAxis(GlobalStringVars.HORIZONTAL_AXIS);
-            float vertical = Input.GetAxis(GlobalStringVars.VERTICAZ_AXIS);
+            vertical = 0;
+            horizontal = Input.GetAxis(GlobalStringVars.HORIZONTAL_AXIS);
+            //float vertical = Input.GetAxis(GlobalStringVars.VERTICAZ_AXIS);
+
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                playerMovement.JumpCharacter();
+                vertical = playerMovement.JumpCharacter();
+                Debug.Log("Клавиша пробел нажата");
+                
             }
 
             if (Input.GetKey(KeyCode.E))
@@ -34,7 +41,7 @@ namespace Platformer2.Inputs
                 //TurnOffControlScript.EIsPressed = false;
             }
 
-            movment = new Vector2(horizontal, 0).normalized;
+            movment = new Vector2(horizontal, vertical).normalized;
         }
 
         private void FixedUpdate()

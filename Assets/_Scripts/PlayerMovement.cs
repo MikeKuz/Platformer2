@@ -8,8 +8,8 @@ namespace Platformer2.Inputs
 
     public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField, Range(0, 20)] private float speed = 3.0f;
-        [SerializeField, Range(0, 20)] private float JumpPoewr = 2.0f;
+        [SerializeField, Range(0, 100)] private float speed = 0.0f;
+        [SerializeField, Range(0, 100)] private float JumpPower = 0.0f;
         private Rigidbody2D playerRigidbody2D;
         static public bool underControl = true;
         static bool jumpIsOn = true;
@@ -25,22 +25,24 @@ namespace Platformer2.Inputs
             if (underControl == true)
             {
                 //playerRigidbody2D.AddRelativeForce(movement * speed);
-                Vector2 targetVelocity = new Vector2(movement.x*speed, movement.y);
+                Vector2 targetVelocity = new Vector2(movement.x*speed, movement.y*JumpPower);
                 playerRigidbody2D.velocity = targetVelocity;
             }
         }
 
-        public void JumpCharacter()
+        public float JumpCharacter()
         {
             if (underControl == true)
             {
                 if (jumpIsOn)
                 {
-                    playerRigidbody2D.AddForce(new Vector2(0, 100 * JumpPoewr));
-                    Debug.Log("пробел нажат");
-
+                    //playerRigidbody2D.AddForce(new Vector2(0, 100 * JumpPoewr));
+                    Vector2 targetVelocity = new Vector2(0, JumpPower);
+                    playerRigidbody2D.velocity = targetVelocity;
+                    return JumpPower;
                 }
             }
+            return 0;
         }
 
         static public void TurnOffUnderControl()
