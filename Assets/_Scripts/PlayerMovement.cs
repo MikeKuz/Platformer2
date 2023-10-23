@@ -1,68 +1,67 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Platformer2.Inputs
 {
-    //[RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody2D))]
 
     public class PlayerMovement : MonoBehaviour
     {
-        [SerializeField, Range(0, 100)] private float speed = 0.0f;
-        [SerializeField, Range(0, 100)] private float JumpPower = 0.0f;
-        private Rigidbody2D playerRigidbody2D;
-        static public bool underControl = true;
-        static bool jumpIsOn = true;
+        [Header("Movements vars")]
+        [SerializeField] private float jumpForce;
+        [SerializeField] private bool isGrounded = false;
+        [SerializeField] private float speed;
+
+        [Header("Settings")]
+        [SerializeField] private Transform groundColliderTransform;
+        [SerializeField] private AnimationCurve curve;
+        [SerializeField] private float jumpOffset;
+        [SerializeField] private LayerMask groundMask;
+
+        private Rigidbody2D rb;
+
 
         private void Awake()
         {
-            playerRigidbody2D = GetComponent<Rigidbody2D>();
-            TurnOnUnderControl();
+            rb = GetComponent<Rigidbody2D>();
+            
         }
 
-        public void MoveCharacter(Vector2 movement)
+        private void FixedUpdate()
         {
-            if (underControl == true)
+            //Jump
+            Vector3 overlapCirclePosition = groundColliderTransform.position;
+            isGrounded = Physics2D.OverlapCircle(overlapCirclePosition, jumpOffset, groundMask);
+        }
+
+        public void Move(float direction, bool isJumpButtonPressed)
+        {
+            //jump
+            if(isJumpButtonPressed) 
             {
-                //playerRigidbody2D.AddRelativeForce(movement * speed);
-                Vector2 targetVelocity = new Vector2(movement.x*speed, movement.y*JumpPower);
-                playerRigidbody2D.velocity = targetVelocity;
+                Jump();
+            }
+            //Horizontal movement
+            if(Mathf.Abs(direction) > 0.01f)
+            {
+                HorizontalMovement(direction);
+            }
+            
+        }
+
+        private void Jump()
+        {
+            if(isGrounded)
+            { 
+                rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
             }
         }
 
-        public float JumpCharacter()
+        private void HorizontalMovement(float direction)
         {
-            if (underControl == true)
-            {
-                if (jumpIsOn)
-                {
-                    //playerRigidbody2D.AddForce(new Vector2(0, 100 * JumpPoewr));
-                    Vector2 targetVelocity = new Vector2(0, JumpPower);
-                    playerRigidbody2D.velocity = targetVelocity;
-                    return JumpPower;
-                }
-            }
-            return 0;
-        }
-
-        static public void TurnOffUnderControl()
-        {
-            underControl = false;
-        }
-
-        static public void TurnOnUnderControl()
-        {
-            underControl = true;
-        }
-
-        static public void TurnOffJump()
-        {
-            jumpIsOn = false;
-        }
-
-        static public void TurnOnJump()
-        {
-            jumpIsOn = true;
+            rb.velocity = new Vector2(curve.Evaluate(direction)*speed, rb.velocity.y);
         }
     }
 }
