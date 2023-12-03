@@ -5,17 +5,20 @@ TagManager:
   serializedVersion: 2
   tags:
   - Damageable
+  - limiter
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 
   - 
   - Ground
-  - 
+  - RailWay
   - 
   - 
   - 
