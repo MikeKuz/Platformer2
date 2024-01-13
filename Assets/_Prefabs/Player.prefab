@@ -41,89 +41,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3753945778282312124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 026a5b170a6d61448a70191c72b1e7f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f899cdc6eb1a414684957c0710aa369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 6834558065286590867}
   firePoin: {fileID: 3753945778282312124}
   front: 0
---- !u!1 &5889332585318005156
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5898473480863654948}
-  - component: {fileID: 8124276862575915012}
-  m_Layer: 3
-  m_Name: BodyCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5898473480863654948
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5889332585318005156}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.000000059605, y: 0.053, z: 0}
-  m_LocalScale: {x: 0.063084, y: 0.1387848, z: 0.063084}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 221063568059350861}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &8124276862575915012
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5889332585318005156}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.10523859}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.2104769}
-  m_EdgeRadius: 0
 --- !u!1 &6756912888442387038
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +77,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6099900202157476801}
-  - {fileID: 5898473480863654948}
   m_Father: {fileID: 8279039128622878664}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8279039128622878709
@@ -173,6 +95,9 @@ GameObject:
   - component: {fileID: 2715467808603593882}
   - component: {fileID: 8547116208643584692}
   - component: {fileID: 3446144607574107871}
+  - component: {fileID: 5020271403097227399}
+  - component: {fileID: 4494910413504511211}
+  - component: {fileID: 1624439163204496471}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -363,6 +288,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dff0ee0b7b80654469fe58740ce1fb06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPosition: {fileID: 0}
+  camera: {fileID: 0}
+  mousePosition: {x: 0, y: 0}
 --- !u!114 &8547116208643584692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,11 +321,61 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 5977658432556235511, guid: 67fbf4e17a5456745b3819b77397182f, type: 3}
-  fireSpeed: 30
+  fireSpeed: 20
   firePoint: {fileID: 6258164446768912880}
-  shootingAnimationTime: 0.3
+  shootingAnimationTime: 0.5
+  animatorChanger: {fileID: 0}
   backwards: 0
   playerMovement: {fileID: 0}
+  gunIsLoaded: 0
+  reloadTime: 0.5
+  timeToReload: 0
+  currentTime: 0
+--- !u!114 &5020271403097227399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8279039128622878709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a5e30aa99decee4e8a7d8e9ffbcc575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backwards: 0
+--- !u!114 &4494910413504511211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8279039128622878709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bba278a8a93d3744b8e628e55f6e3416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backwards: 0
+--- !u!114 &1624439163204496471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8279039128622878709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4716bc3322831fd40adced5885064e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  isGrounded: 0
+  isJump: 0
+  isRun: 0
+  isDead: 0
+  _backwards: 0
+  sr: {fileID: 0}
 --- !u!1 &8669377102253154230
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,7 +385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6099900202157476801}
-  - component: {fileID: 1091137899625384025}
+  - component: {fileID: 6032700717915509330}
   m_Layer: 3
   m_Name: GroundCollider
   m_TagString: Player
@@ -430,8 +408,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 221063568059350861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1091137899625384025
-CircleCollider2D:
+--- !u!70 &6032700717915509330
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -462,6 +440,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.58
+  m_Offset: {x: 0.03, y: 1}
+  m_Size: {x: 1.73, y: 3.3}
+  m_Direction: 0

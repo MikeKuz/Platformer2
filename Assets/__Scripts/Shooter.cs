@@ -9,57 +9,101 @@ public class Shooter : MonoBehaviour
     [SerializeField] private float fireSpeed;
     [SerializeField] private Transform firePoint;
     [SerializeField, Range(0.1f, 1f)] private float shootingAnimationTime;
-    private bool isShooting;
-    private Animator animator;
+    private bool _isShooting;
+    private Aim aim;
+
+    //private Animator animator;
+    public AnimationChanger animatorChanger;
     private SpriteRenderer sr;
     public bool backwards = false;
     public PlayerMovement playerMovement;
+    [SerializeField] private bool gunIsLoaded;
+    [SerializeField, Range(0.1f, 3f)] private float reloadTime; //Время между выстрелами
+    [SerializeField]private float timeToReload; //Время до перезарадки
+    [SerializeField] private float currentTime;  //Текущее время до перезарядки
+
+    public bool isShooting 
+    { get { 
+            return _isShooting; 
+        } 
+        set { 
+            if(value==true)
+            {
+                _isShooting=value;
+            }
+            else
+            {
+                animatorChanger.NotShooting();
+                _isShooting = value;
+            }
+        } 
+    }
+
+    private void Update()
+    {
+        if (gunIsLoaded==false)
+        {
+            if (timeToReload < -1)
+            {
+                timeToReload = reloadTime;
+
+            }
+            else
+            {
+                timeToReload -= Time.deltaTime;
+            }
+
+            if (timeToReload <= 0)
+            {
+                gunIsLoaded = true;
+                timeToReload = -2;
+            }
+        }
+    }
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        aim = GetComponent<Aim>();
+        animatorChanger = GetComponent<AnimationChanger>();
+        //animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
 
     }
 
-    public void Shoot(float direction)
+    public void Shoot()
     {
-        isShooting = true;
-        GameObject currentBullet = Instantiate(bullet, firePoint.position, Quaternion.identity);
-        Rigidbody2D currentBulletVelocity = currentBullet.GetComponent<Rigidbody2D>();
-        backwards = playerMovement.Backwards;
-
-        if (!backwards)
+        if(gunIsLoaded)
         {
-            currentBulletVelocity.velocity = new Vector2(fireSpeed*1, currentBulletVelocity.velocity.y);
-            ChangeAnimationOnShoot(isShooting, false);
-
-        }
-
-        
-
-        else
-        {
+            Vector2 directionFromPlayerToAim = new Vector2(aim.directionFromPlayerToAim.x, aim.directionFromPlayerToAim.y);
             
-            currentBulletVelocity.velocity = new Vector2(fireSpeed*(-1), currentBulletVelocity.velocity.y);
-            ChangeAnimationOnShoot(isShooting, true);
+            gunIsLoaded=false;
+            GameObject currentBullet = Instantiate(bullet, firePoint.position, Quaternion.identity);
+            Rigidbody2D currentBulletVelocity = currentBullet.GetComponent<Rigidbody2D>();
+            currentBulletVelocity.velocity = directionFromPlayerToAim.normalized * fireSpeed;
 
+            ChangeAnimation(reloadTime);
         }
-
     }
 
-    private void ChangeAnimationOnShoot(bool isShooting, bool mirrored)
+
+    private void ChangeAnimation(float reloadTime)
     {
-        sr.flipX = mirrored;
-        animator.SetBool("isShooting", isShooting);
-        Invoke(nameof(ChangeAnimationOnNotShoot), shootingAnimationTime);
+        animatorChanger.IsShooting(reloadTime);
+
     }
 
+    //private void ChangeAnimationOnShoot(bool isShooting, bool mirrored)
+    //{
+    //    sr.flipX = mirrored;
+    //    //animator.SetBool("isShooting", isShooting);
+    //    Invoke(nameof(ChangeAnimationOnNotShoot), shootingAnimationTime);
+    //}
 
-    private void ChangeAnimationOnNotShoot()
-    {
-        isShooting = false;
-        animator.SetBool("isShooting", isShooting);
-    }
+
+    //private void ChangeAnimationOnNotShoot()
+    //{
+    //    _isShooting = false;
+    //    //animator.SetBool("isShooting", isShooting);
+    //}
 }

@@ -10,6 +10,7 @@ public class HealthBar : MonoBehaviour
 
     private void Awake()
     {
+        health = GameObject.Find("Player").GetComponent<Health>();
         health.HealthChanged += OnHealthChanged;
     }
     private void OnHealthChanged(float valueAsPercantage)

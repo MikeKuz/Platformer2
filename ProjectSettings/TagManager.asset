@@ -8,6 +8,7 @@ TagManager:
   - limiter
   - Bullet
   - Enemy
+  - Coin
   layers:
   - Default
   - TransparentFX
